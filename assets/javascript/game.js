@@ -1,9 +1,8 @@
-
-  var app = {};
-
   //game settings
+  var app = {};
   app.wordBank = ['book', 'bicycle'];
   app.avaiGuesses = 12; 
+  app.word = '';
 
   //code for initializing game menu
   app.initialize = function() {
@@ -29,16 +28,15 @@
     //pick random word
     var bank = this.wordBank; 
     var solution = bank[Math.floor(Math.random() * bank.length)];
-
+    this.word = solution;
     this.initRender(solution);
-    this.gamePlay(solution);
-
   }
 
-  //initial rendering
+  //initial game rendering
   app.initRender = function (word){
-    document.getElementById('game').innerHTML = ' _'.repeat(word.length);
+    document.getElementById('gameState').innerHTML = '_ '.repeat(word.length);
     document.getElementById('guessesLeft').innerHTML = this.avaiGuesses;
+    document.getElementById('guessesState').innerHTML = '';
     //show game elements: guesses left, guessed letters, etc
     var thingsToShow = document.getElementsByClassName('needToShow');
       for (var element of thingsToShow) {
@@ -46,24 +44,49 @@
       }
   }
 
-  //game logic
-  app.gamePlay = function (word) {
-    var oneGuess; 
-    var that = this;
-    var currentState = document.getElementById('state').innerHTML;
-    var currentGuessesLeft = document.getElementById('guessesLeft').innerHTML;
-    console.log('current guesses left is: ', currentGuessesLeft);
-    document.onkeyup = function (e){
-      oneGuess = e.key.toLowerCase();
-    }
-    if (word.indexOf(oneGuess) === -1){
-      that.render()
-    }
-  } 
+  //regular game render 
+  app.render = function (gameState, guessesLeft, guessesState) {
+    console.log('game is rendering');
+    document.getElementById('gameState').innerHTML = gameState;
+    document.getElementById('guessesLeft').innerHTML = guessesLeft;
+    document.getElementById('guessesState').innerHTML = guessesState;
+  }
 
-  //game render 
-  app.render = function () {
-    console.log('game is rendering')
+
+  //game logic
+  document.onkeyup = function (e){
+    var oneGuess; 
+    var currentGameState = document.getElementById('gameState').innerHTML;
+    var currentGuessesLeft = document.getElementById('guessesLeft').innerHTML;
+    var currentGuessesState = document.getElementById('guessesState').innerHTML;
+    console.log('current game state is: ', currentGameState)
+    console.log('current guesses state is: ', currentGuessesState)
+    console.log('current guesses left is: ', currentGuessesLeft);
+    oneGuess = e.key.toLowerCase();
+    
+    //logic for new wrong guess
+    if (app.word.indexOf(oneGuess) === -1 && currentGuessesState.indexOf(oneGuess) === -1){
+      console.log('wrong letter; you pressed: ', oneGuess)
+      currentGuessesLeft --;
+      currentGuessesState += oneGuess + ' '; 
+      app.render(currentGameState, currentGuessesLeft, currentGuessesState);
+    //logic for new right guess
+  } else if (app.word.indexOf(oneGuess) !== -1 && currentGuessesState.indexOf(oneGuess) === -1) {
+      console.log('correct letter; you pressed: ', oneGuess)
+      currentGuessesLeft --;
+      currentGuessesState += oneGuess + ' '; 
+      console.log('currentGameState length is: ',currentGameState.length)
+      console.log('currentGameState type is: ',typeof(currentGameState))
+      var CGSsplit = currentGameState.split('')
+      for (var i = 0; i<app.word.length; i++){
+        if (app.word[i] === oneGuess) {
+          CGSsplit[2*i] = oneGuess;
+        }
+        currentGameState = CGSsplit.join("");
+        console.log('new game state is: ', currentGameState)
+      }
+      app.render(currentGameState, currentGuessesLeft, currentGuessesState);
+    }
   }
 
   //initialize game menu
