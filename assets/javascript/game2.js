@@ -10,7 +10,6 @@ app.icon = '';
 app.gameState = '';
 app.guessesLeft = 0;
 app.guessesState = '';
-app.badCharCodes = [115];
 app.badKeys = ['capslock', 'arrowright','arrowup', 'arrowdown','arrowleft', 'control', 'alt', 'enter', 'backspace', 'numlock', 'printscreen', 'pause', 'delete', 'home', 'pageup', 'pagedown', 'end', 'insert']
 app.goNoGo = 1; 
 app.diagram = [];
@@ -159,8 +158,7 @@ document.onkeyup = function (e){
     console.log('current guesses state is: ', app.guessesState);
     console.log('current guesses left is: ', app.guessesLeft);
     //logic to filter only key strokes that are letters
-    if (oneGuess.charCodeAt(0) > 96 && oneGuess.charCodeAt(0) < 123 && 
-    app.badCharCodes.indexOf(oneGuess.charCodeAt(0)) === -1 && app.badKeys.indexOf(oneGuess) === -1 ) {
+    if (oneGuess.charCodeAt(0) > 96 && oneGuess.charCodeAt(0) < 123 && app.badKeys.indexOf(oneGuess) === -1 ) {
       //Only apply logic to new guesses
       if (app.guessesState.indexOf(oneGuess) === -1) {
         //logic for a new wrong guess
