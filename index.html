@@ -2,17 +2,23 @@
 
 <html>
 <head>
+  <title>Chi's "Hanganminal" Game</title>
+  <script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js'></script>
 </head>
 
 <body>
-  <div class='needToShow' style='display: none'>
-    <p>Guesses left: <span id='guessesLeft'></span></p>
+  <div class='needToShow' style='display: none; text-align: center'>
+    <p><strong>Guesses left: </strong><span id='guessesLeft'></span></p>
     <p id='gameState'>&nbsp;</p>
-    <p>Letters already guessed:</p>
+    <p><strong>Letters already guessed:</strong></p>
     <p id='guessesState'></p>
   </div>
+  <div style='text-align: center'>
+    <br>
+    <pre><span id='diagram'></span></pre>
+  </div>
   <br>
-  <h3 class='needToHide' id="start">Press any key to start Hangman!</h3>
+  <h3 style='text-align: center' class='needToHide' id="start">Press any key to start Hangman!</h3>
 
   <script type="text/javascript" src="assets/javascript/game2.js"></script>
 </body>
