@@ -1,7 +1,6 @@
 //game settings & initializing
 var app = {};
 app.wordBank = ['horse', 'monkey', 'fox', 'dog', 'pig', 'lion', 'mouse', 'hamster', 'panda', 'koala', 'wolf'];
-app.wordBank= ['horse', 'monkey']
 app.iconBank = ["&#x1F434;","&#x1F435;", "&#x1F98A;", "&#x1F436;", "&#x1F437;", "&#x1F981;", "&#x1F42D;", "&#x1F439;", "&#x1F43C;", "&#x1F428;", "&#x1F43A;"]
 app.avaiGuesses = 12; 
 app.digramStart = 7;  
@@ -13,6 +12,8 @@ app.guessesState = '';
 app.badKeys = ['capslock', 'arrowright','arrowup', 'arrowdown','arrowleft', 'control', 'alt', 'enter', 'backspace', 'numlock', 'printscreen', 'pause', 'delete', 'home', 'pageup', 'pagedown', 'end', 'insert']
 app.goNoGo = 1; 
 app.diagram = [];
+app.wins = 0;
+app.losses = 0;
 
 
 //code for game starting
@@ -24,6 +25,7 @@ app.gameStart = function() {
     element.style.display = 'none';
   }
   //set initial game states
+  console.log("word bank length is: ", this.wordBank.length)
   var RN = [Math.floor(Math.random() * this.wordBank.length)];
   this.word = this.wordBank[RN];
   this.icon = this.iconBank[RN];
@@ -34,7 +36,7 @@ app.gameStart = function() {
   for (var i = 0; i < 10; i++) { 
     app.diagram[i]='';
     for (var j = 0; j < 10; j++) {
-      app.diagram[i] += "*";  
+      app.diagram[i] += " ";  
     }
     app.diagram[i] += '\n';
   }
@@ -70,6 +72,8 @@ app.victory = function () {
   console.log("yay you win!");
   document.getElementById('start').style.display = 'block';
   this.goNoGo = 1;
+  this.wins ++;  
+  document.getElementById('wins').innerHTML = this.wins;
   //logic to play victory sound effect
 
   var vAudio = new Audio('assets/sounds/victory.mp3');
@@ -81,6 +85,8 @@ app.failure = function () {
   console.log("no! you lose!")
   document.getElementById('start').style.display = 'block';
   this.goNoGo = 1;
+  this.losses ++;  
+  document.getElementById('losses').innerHTML = this.losses;
   //logic to play failure sound effect
   var fAudio = new Audio('assets/sounds/failure.mp3');
   fAudio.play();
@@ -157,6 +163,7 @@ document.onkeyup = function (e){
     console.log('current game state is: ', app.gameState);
     console.log('current guesses state is: ', app.guessesState);
     console.log('current guesses left is: ', app.guessesLeft);
+    console.log('oneGuess is: ', oneGuess)
     //logic to filter only key strokes that are letters
     if (oneGuess.charCodeAt(0) > 96 && oneGuess.charCodeAt(0) < 123 && app.badKeys.indexOf(oneGuess) === -1 ) {
       //Only apply logic to new guesses
